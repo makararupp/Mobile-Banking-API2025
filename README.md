@@ -60,3 +60,7 @@ spring.datasource.password=password
   - ./gradlew.bat clean
   - ./gradlew.bat bootRun
 
+# API Validation 
+   1. Set up Constraint in DTO
+   2. Validation DTO in Controller
+   3. Handle Exception
