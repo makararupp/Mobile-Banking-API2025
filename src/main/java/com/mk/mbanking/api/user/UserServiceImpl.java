@@ -1,2 +1,31 @@
-package com.mk.mbanking.api.user;public class UserServiceImpl {
+package com.mk.mbanking.api.user;
+
+import com.mk.mbanking.api.user.web.SaveUserDto;
+import com.mk.mbanking.api.user.web.UserDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService{
+    private final UserMapper userMapper;
+    private final UserMapstruct userMapstruct;
+    @Override
+    public UserDto creat(SaveUserDto saveUserDto) {
+        User user = userMapstruct.saveUserDtoToUser(saveUserDto);
+        userMapper.insert(user);
+        user = userMapper.selectById(user.getId()).orElseThrow(()->
+                new RuntimeException("User is not found"));
+        return userMapstruct.userToUserDto(user);
+    }
+
+    @Override
+    public UserDto findById(Long id) {
+        User user = userMapper.selectById(id).orElseThrow(()->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with id =%d is not found",id)));
+        return userMapstruct.userToUserDto(user);
+    }
 }
