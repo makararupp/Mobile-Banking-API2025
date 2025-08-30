@@ -40,4 +40,17 @@ public class UserRestController {
                 .data(dto)
                 .build();
     }
+    @PutMapping("/{id}")
+    public BaseApi<?> update(@PathVariable("id") Long id, @Valid @RequestBody SaveUserDto dto){
+        UserDto userDto = userService.updateById(id,dto);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("users have been update")
+                .timestamp(LocalDateTime.now())
+                .data(userDto)
+                .build();
+    }
+
 }

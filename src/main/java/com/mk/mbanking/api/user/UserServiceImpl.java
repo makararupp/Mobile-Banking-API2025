@@ -28,4 +28,18 @@ public class UserServiceImpl implements UserService{
                         String.format("User with id =%d is not found",id)));
         return userMapstruct.userToUserDto(user);
     }
+
+    @Override
+    public UserDto updateById(Long id, SaveUserDto saveUserDto) {
+        if(userMapper.exitsById(id)){
+            //TODO: update user model
+            User user = userMapstruct.saveUserDtoToUser(saveUserDto);
+            user.setId(id);
+            userMapper.update(user);
+            return findById(id);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("user with id = %d is not found in db",id));
+
+    }
 }
