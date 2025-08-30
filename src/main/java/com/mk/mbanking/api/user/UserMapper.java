@@ -1,9 +1,9 @@
 package com.mk.mbanking.api.user;
 
-import com.mk.mbanking.base.BaseApi;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -35,4 +35,8 @@ public interface UserMapper {
 
     @UpdateProvider(type = UserProvider.class, method = "updateIsDeletedSql")
     void updateIsDeleted(@Param("id")Long id, @Param("status")Boolean status);
+
+    @SelectProvider(type = UserProvider.class, method = "buildSelectWithPagingSql")
+    @ResultMap("userResultMap")
+    List<User> select();
 }

@@ -1,5 +1,6 @@
 package com.mk.mbanking.api.user.web;
 
+import com.github.pagehelper.PageInfo;
 import com.mk.mbanking.api.user.UserService;
 import com.mk.mbanking.base.BaseApi;
 import jakarta.validation.Valid;
@@ -61,6 +62,21 @@ public class UserRestController {
                 .message("users has been deleted")
                 .timestamp(LocalDateTime.now())
                 .data(dto)
+                .build();
+    }
+
+    @GetMapping
+    public BaseApi<?> findWithPaging(@RequestParam(required = false, defaultValue = "1") int pageNum,
+                                     @RequestParam(required = false, defaultValue = "25") int pageSize) {
+
+        PageInfo<UserDto> userDtoPageInfo = userService.findWithPaging(pageNum, pageSize);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("Users have been found")
+                .timestamp(LocalDateTime.now())
+                .data(userDtoPageInfo)
                 .build();
     }
 

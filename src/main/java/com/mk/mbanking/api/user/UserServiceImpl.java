@@ -1,20 +1,28 @@
 package com.mk.mbanking.api.user;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mk.mbanking.api.user.web.SaveUserDto;
 import com.mk.mbanking.api.user.web.UserDto;
 import com.mk.mbanking.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.desktop.PreferencesEvent;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
     private final UserMapstruct userMapstruct;
+
+    @Override
+    public PageInfo<UserDto> findWithPaging(int pageNum, int pageSize) {
+        PageInfo<User> userPageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(userMapper::select);
+
+        return userMapstruct.userPageInfoToUserDtoPageInfo(userPageInfo);
+    }
+
     @Override
     public UserDto creat(SaveUserDto saveUserDto) {
         User user = userMapstruct.saveUserDtoToUser(saveUserDto);

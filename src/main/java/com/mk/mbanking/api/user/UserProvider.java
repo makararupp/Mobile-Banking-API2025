@@ -3,8 +3,17 @@ package com.mk.mbanking.api.user;
 import org.apache.ibatis.jdbc.SQL;
 
 public class UserProvider {
-
     private final String USERS = "users";
+
+    public String buildSelectWithPagingSql() {
+        return new SQL() {{
+            SELECT("*");
+            FROM(USERS);
+            WHERE("is_deleted = FALSE");
+            ORDER_BY("id DESC");
+        }}.toString();
+    }
+
     public String buildSelectByIdSql(){
         return new SQL() {{
             SELECT("*");
