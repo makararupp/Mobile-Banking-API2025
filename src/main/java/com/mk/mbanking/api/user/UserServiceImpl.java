@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.awt.desktop.PreferencesEvent;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -40,6 +42,16 @@ public class UserServiceImpl implements UserService{
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                 String.format("user with id = %d is not found in db",id));
+    }
 
+    @Override
+    public UserDto deleteById(Long id) {
+        if(userMapper.exitsById(id)){
+            UserDto dto =findById(id);
+            userMapper.updateIsDeleted(id, true);
+            return dto;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("user with id=%d is    not found in db.",id));
     }
 }

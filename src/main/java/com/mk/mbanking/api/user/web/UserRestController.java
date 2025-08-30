@@ -52,5 +52,16 @@ public class UserRestController {
                 .data(userDto)
                 .build();
     }
+    @DeleteMapping("/{id}")
+    public BaseApi<?> deleteStatus(@PathVariable("id") Long id){
+        UserDto dto = userService.deleteById(id);
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("users has been deleted")
+                .timestamp(LocalDateTime.now())
+                .data(dto)
+                .build();
+    }
 
 }

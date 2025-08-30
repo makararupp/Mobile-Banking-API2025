@@ -36,4 +36,13 @@ public class UserProvider {
             WHERE("id = #{u.id}");
         }}.toString();
     }
+
+    public String updateIsDeletedSql(){
+        return new SQL(){{
+            UPDATE(USERS);
+            SET("is_deleted = #{status}");
+            WHERE("id = #{id}");
+        }}.toString();
+    }
+
 }
