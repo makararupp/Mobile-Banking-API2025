@@ -8,6 +8,8 @@ import com.mk.mbanking.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,12 @@ public class UserServiceImpl implements UserService{
                 .doSelectPageInfo(userMapper::select);
 
         return userMapstruct.userPageInfoToUserDtoPageInfo(userPageInfo);
+    }
+
+    @Override
+    public List<UserDto> listAll() {
+        List<User> list = userMapper.findAll();
+        return userMapstruct.toDtoList(list);
     }
 
     @Override

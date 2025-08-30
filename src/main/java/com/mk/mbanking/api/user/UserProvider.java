@@ -5,6 +5,13 @@ import org.apache.ibatis.jdbc.SQL;
 public class UserProvider {
     private final String USERS = "users";
 
+    public String buildSelectAllSql(){
+        return new SQL(){{
+            SELECT( "*");
+            FROM(USERS);
+            WHERE("is_deleted = FALSE");
+        }}.toString();
+    }
     public String buildSelectWithPagingSql() {
         return new SQL() {{
             SELECT("*");

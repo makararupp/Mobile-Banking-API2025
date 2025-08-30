@@ -1,5 +1,6 @@
 package com.mk.mbanking.api.user;
 
+import com.mk.mbanking.api.user.web.UserDto;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -39,4 +40,8 @@ public interface UserMapper {
     @SelectProvider(type = UserProvider.class, method = "buildSelectWithPagingSql")
     @ResultMap("userResultMap")
     List<User> select();
+
+    @SelectProvider(type = UserProvider.class, method = "buildSelectAllSql")
+    @ResultMap("userResultMap")
+    List<User> findAll();
 }
