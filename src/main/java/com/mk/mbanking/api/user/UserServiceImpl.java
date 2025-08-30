@@ -2,6 +2,7 @@ package com.mk.mbanking.api.user;
 
 import com.mk.mbanking.api.user.web.SaveUserDto;
 import com.mk.mbanking.api.user.web.UserDto;
+import com.mk.mbanking.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto findById(Long id) {
         User user = userMapper.selectById(id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with id =%d is not found",id)));
+                new ResourceNotFoundException("User","id",id));
         return userMapstruct.userToUserDto(user);
     }
 
@@ -40,8 +40,7 @@ public class UserServiceImpl implements UserService{
             userMapper.update(user);
             return findById(id);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                String.format("user with id = %d is not found in db",id));
+        throw new ResourceNotFoundException("User", "id",id);
     }
 
     @Override
@@ -51,7 +50,6 @@ public class UserServiceImpl implements UserService{
             userMapper.updateIsDeleted(id, true);
             return dto;
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                String.format("user with id=%d is    not found in db.",id));
+        throw new ResourceNotFoundException("User", "id",id);
     }
 }

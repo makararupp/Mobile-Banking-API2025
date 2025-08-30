@@ -2,7 +2,9 @@ package com.mk.mbanking.exception;
 
 import com.mk.mbanking.base.BaseApi;
 import com.mk.mbanking.base.ErrorApi;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,4 +53,30 @@ public class ApiException {
                 .errors(e.getReason())
                 .build();
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorApi<Object>> handleResourceNotFoundException(
+            ResourceNotFoundException ex,
+            HttpServletRequest request) {
+
+        // Create error details map
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("resource", ex.getResourceName());
+        errorDetails.put("field", ex.getFieldName());
+        errorDetails.put("value", ex.getFieldValue());
+        errorDetails.put("path", request.getRequestURI());
+
+        // Use the builder pattern to create ErrorApi
+        ErrorApi<Object> errorResponse = ErrorApi.builder()
+                .status(false)
+                .code(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .errors(errorDetails)
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
 }
