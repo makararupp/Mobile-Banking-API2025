@@ -2,6 +2,8 @@ package com.mk.mbanking.util;
 
 import com.mk.mbanking.api.file.Web.FileDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,10 +41,17 @@ public class FileUtil {
        return FileDto.builder()
                .name(name)
                .size(size)
+               .readableSize(readableFileSize(size))
                .extension(extension)
                .url(url)
                .downloadUrl(fileDownload+ name)
                .build();
+   }
+   public String readableFileSize(Long size){
+       if(size <=0) return "0 KB";
+       String[] utils = {"B", "KB", "MB", "GB", "TB"};
+       int digitGroup = (int) (Math.log10(size)/ Math.log10(1024));
+       return String.format("%.2f %s", size/Math.pow(1024,digitGroup), utils[digitGroup]);
    }
    public String getExtension(String name){
        int dotLastIndex = name.lastIndexOf(".");
@@ -54,5 +63,14 @@ public class FileUtil {
    public String getDownloadUrl(String name){
        return fileDownload + name;
    }
+    public Resource load(String name) {
+        Path path = Paths.get(fileServerPath + name);
+        return UrlResource.from(path.toUri());
+    }
+
+    public void delete(String name) throws IOException {
+        Path path = Paths.get(fileServerPath + name);
+        Files.deleteIfExists(path);
+    }
     
 }
