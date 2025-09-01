@@ -206,3 +206,9 @@ UserDto userToUserDto(User user);<br>
 
 # Find Name file Like the image <br>
 ![](src/main/resources/static/img/findName.png)
+
+# step download file <br>
+ - upload image after successfully copy path downloadUrl by image below: <br>
+![](src/main/resources/static/img/download.png) <br>
+ - Pass url to browser it's show image like this : <br>
+![](src/main/resources/static/img/dialog box download.png) <br>
