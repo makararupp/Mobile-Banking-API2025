@@ -13,5 +13,7 @@ public interface FileService {
     List<FileDto> uploadMultipleFile(List<MultipartFile> files);
 
     Resource download(String name);
+
+    void delete(String name);
     
 }

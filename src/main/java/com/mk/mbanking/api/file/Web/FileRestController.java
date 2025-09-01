@@ -71,4 +71,9 @@ public class FileRestController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{name}")
+   void  delete(@PathVariable String name){
+      fileService.delete(name);
+    }
 }

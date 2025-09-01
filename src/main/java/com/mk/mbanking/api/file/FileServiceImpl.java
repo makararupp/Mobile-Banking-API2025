@@ -60,4 +60,16 @@ public class FileServiceImpl implements FileService{
     public Resource download(String name) {
         return fileUtil.load(name);
     }
+
+    @Override
+    public void delete(String name) {
+        try {
+          FileDto dto = findByName(name);
+          if (dto != null){
+              fileUtil.delete(name);
+          }
+        }catch (IOException e){
+            throw  new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+        }
+    }
 }
