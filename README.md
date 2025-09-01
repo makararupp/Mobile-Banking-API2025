@@ -200,4 +200,7 @@ UserDto userToUserDto(User user);<br>
     }
     <br><br>
   }
+# Read able Size file 
+
+![](src/main/resources/static/img/readableSize.png)
 
