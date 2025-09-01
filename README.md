@@ -211,4 +211,5 @@ UserDto userToUserDto(User user);<br>
  - upload image after successfully copy path downloadUrl by image below: <br>
 ![](src/main/resources/static/img/download.png) <br>
  - Pass url to browser it's show image like this : <br>
-![](src/main/resources/static/img/dialog box download.png) <br>
+
+ ![](src/main/resources/static/img/1.png)
