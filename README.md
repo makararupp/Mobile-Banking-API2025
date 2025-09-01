@@ -124,3 +124,80 @@ public interface UserMapstruct {<br>
 User saveUserDtoToUser(SaveUserDto dto);<br>
 UserDto userToUserDto(User user);<br>
 }
+
+# How to upload images to resource 
+1. Step number 1
+ - Configure application.properties or appliction.yml
+
+   file.server-path = D:\\Self Study 2025\\Rest Api Mybatis\\Thumbnail\\ <br>
+   file.client-path = /files/**  <br>
+   file.base-url = http://localhost:8080/file/  <br>
+   file.download-url=http://localhost:8080/api/v1/files/download/ <br>
+
+2. Step number 2
+   Create file Utils Using FileDto
+- Design FileDto
+  recode field (name, size , url, extension,downloadUrl)
+- File Service
+   get from MultipleFile 
+
+  - create file util    <br>
+    @Component  <br>
+    public class FileUtil {  <br>
+    @Value("${file.base-url}")  <br>
+    private String fileBaseUrl;  <br>
+
+    @Value("${file.server-path}")  <br>
+    private String fileServerPath;  <br>
+
+    @Value("${file.download-url}")  <br>
+    private String fileDownload;  <br>
+
+    public FileDto upload(MultipartFile file){  <br>
+    String extension = getExtension(file.getOriginalFilename()); <br>
+    String name = String.format("%s.%s", UUID.randomUUID(),extension); <br>
+    Long size = file.getSize(); <br>
+    String url = getUrl(name); <br>
+
+         Path path = Paths.get(fileServerPath+name);
+         try {
+             Files.copy(file.getInputStream(),path);
+         } catch (IOException e) {
+           throw  new ResponseStatusException(
+                   HttpStatus.INTERNAL_SERVER_ERROR,
+                   e.getMessage());
+         }
+         return FileDto.builder()
+                 .name(name)
+                 .size(size)
+                 .extension(extension)
+                 .url(url)
+                 .downloadUrl(fileDownload+ name)
+                 .build();
+    }
+  
+    public String getExtension(String name){ <br>
+           int dotLastIndex = name.lastIndexOf("."); <br> 
+    return name.substring(dotLastIndex+1); <br>
+    }
+    <br><br>
+    public String getUrl(String name){<br>
+    return fileBaseUrl + name;<br>
+    }
+    <br><br>
+    public String getDownloadUrl(String name){<br>
+    return fileDownload + name;<br>
+    }
+    <br><br>
+    public Resource load(String name) {<br>
+    Path path = Paths.get(fileServerPath + name);<br>
+    return UrlResource.from(path.toUri());<br>
+    }
+    <br><br>
+    public void delete(String name) throws IOException {  <br>
+              Path path = Paths.get(fileServerPath + name); <br>
+    Files.deleteIfExists(path); <br>
+    }
+    <br><br>
+  }
+
