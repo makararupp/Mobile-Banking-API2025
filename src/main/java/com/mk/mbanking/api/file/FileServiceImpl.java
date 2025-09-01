@@ -55,4 +55,9 @@ public class FileServiceImpl implements FileService{
         }
         return fileDtoList;
     }
+
+    @Override
+    public Resource download(String name) {
+        return fileUtil.load(name);
+    }
 }

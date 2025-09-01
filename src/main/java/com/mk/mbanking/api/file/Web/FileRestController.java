@@ -3,11 +3,16 @@ package com.mk.mbanking.api.file.Web;
 import com.mk.mbanking.api.file.FileService;
 import com.mk.mbanking.base.BaseApi;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,5 +56,19 @@ public class FileRestController {
                 .timestamp(LocalDateTime.now())
                 .data(fileDto)
                 .build();
+    }
+    @GetMapping("/download/{name}")
+    public  ResponseEntity<Resource> download(@PathVariable("name")String name) throws IOException{
+        Resource resource = fileService.download(name);
+
+        String contentType = Files.probeContentType(resource.getFile().toPath());
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }
