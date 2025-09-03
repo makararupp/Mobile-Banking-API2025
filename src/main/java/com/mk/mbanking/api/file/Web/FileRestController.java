@@ -58,7 +58,8 @@ public class FileRestController {
                 .build();
     }
     @GetMapping("/download/{name}")
-    public  ResponseEntity<Resource> download(@PathVariable("name")String name) throws IOException{
+    public  ResponseEntity<Resource> download(@PathVariable("name")String name)
+            throws IOException{
         Resource resource = fileService.download(name);
 
         String contentType = Files.probeContentType(resource.getFile().toPath());
@@ -68,12 +69,13 @@ public class FileRestController {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{name}")
-   void  delete(@PathVariable String name){
+    void  delete(@PathVariable String name){
       fileService.delete(name);
     }
 }

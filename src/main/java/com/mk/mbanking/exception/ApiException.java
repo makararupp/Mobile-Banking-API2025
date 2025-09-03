@@ -1,6 +1,5 @@
 package com.mk.mbanking.exception;
 
-import com.mk.mbanking.base.BaseApi;
 import com.mk.mbanking.base.ErrorApi;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

@@ -11,9 +11,7 @@ public interface FileService {
     FileDto uploadSingleFile(MultipartFile file);
     FileDto findByName(String name) throws IOException;
     List<FileDto> uploadMultipleFile(List<MultipartFile> files);
-
     Resource download(String name);
-
     void delete(String name);
     
 }
