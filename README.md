@@ -213,3 +213,56 @@ UserDto userToUserDto(User user);<br>
  - Pass url to browser it's show image like this : <br>
 
  ![](src/main/resources/static/img/1.png)
+ 
+# Security In memory
+1. Add dependency
+   implementation 'org.springframework.boot:spring-boot-starter-security'
+2. Define bean FilterChain <br>
+
+public class SecurityConfig { <br>
+        //injection bean <br>
+    private final PasswordEncoder passwordEncoder;
+
+    //1. Define bean: security FilterChain . // update spring version3. like arrow function.
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        // Disable CSRF (for APIs)
+        http.csrf(token -> token.disable());
+
+        //Configure Http mapping URL.
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/account-types/**").hasRole("USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/files/**").hasRole("EDITOR")
+                .anyRequest().authenticated()
+        );
+
+        //Configure security mechanism
+        http.httpBasic(httpBasic->{});
+
+        // Make session stateless
+        http.sessionManagement(session
+                ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
+
+3. Define In Memory <br>
+@Bean <br>
+public UserDetailsService userDetailsService(){<br>
+
+        UserDetails admin = User.builder()
+                .username("makara")
+                .password(passwordEncoder.encode("admin123"))
+                .roles("ADMIN")
+                .build();
+
+        UserDetails editor = User.builder()
+                .username("dara")
+                .password(passwordEncoder.encode("123"))
+                .roles("EDITOR")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin, editor);
+    }
+
+}
