@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapstruct {
-     @Mapping(ignore = true,target = "id")
+     //@Mapping(ignore = true,target = "id")
      User saveUserDtoToUser(SaveUserDto dto);
      UserDto userToUserDto(User user);
      PageInfo<UserDto> userPageInfoToUserDtoPageInfo(PageInfo<User> model);

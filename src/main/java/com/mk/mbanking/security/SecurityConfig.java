@@ -3,13 +3,14 @@ package com.mk.mbanking.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     //injection bean
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
     //1. Define bean: security FilterChain . // update spring version3. like arrow function.
     @Bean
@@ -29,8 +31,9 @@ public class SecurityConfig {
 
         //Configure Http mapping URL.
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/account-types/**").hasRole("USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/files/**").hasRole("EDITOR")
                 .anyRequest().authenticated()
         );
 
@@ -44,7 +47,16 @@ public class SecurityConfig {
     }
 
      // 2. Define bean: AuthenticationManager.[User InMemory]
+     // custom from DB
     @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+
+/*    @Bean
     public UserDetailsService userDetailsService(){
         UserDetails user = User.builder()
                 .username("sam")
@@ -55,10 +67,16 @@ public class SecurityConfig {
         UserDetails admin = User.builder()
                 .username("makara")
                 .password(passwordEncoder.encode("admin123"))
-                .roles("ADMIN", "USER")
+                .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+        UserDetails editor = User.builder()
+                .username("dara")
+                .password(passwordEncoder.encode("123"))
+                .roles("EDITOR")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin, editor);
+    }*/
 
 }
