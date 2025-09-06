@@ -33,7 +33,7 @@ public class UserRestController {
                .build();
     }
     @GetMapping("/{id}")
-    public BaseApi<?> findUserId(@PathVariable("id") Long id){
+    public BaseApi<?> findUserId(@PathVariable("id") Integer id){
         UserDto dto = userService.findById(id);
         return BaseApi.builder()
                 .status(true)
@@ -44,7 +44,7 @@ public class UserRestController {
                 .build();
     }
     @PutMapping("/{id}")
-    public BaseApi<?> update(@PathVariable("id") Long id, @Valid @RequestBody SaveUserDto dto){
+    public BaseApi<?> update(@PathVariable("id") Integer id, @Valid @RequestBody SaveUserDto dto){
         UserDto userDto = userService.updateById(id,dto);
 
         return BaseApi.builder()
@@ -56,7 +56,7 @@ public class UserRestController {
                 .build();
     }
     @DeleteMapping("/{id}")
-    public BaseApi<?> deleteStatus(@PathVariable("id") Long id){
+    public BaseApi<?> deleteStatus(@PathVariable("id") Integer id){
         UserDto dto = userService.deleteById(id);
         return BaseApi.builder()
                 .status(true)
@@ -82,7 +82,7 @@ public class UserRestController {
                 .build();
     }
 
-    @GetMapping("/allUsers")
+   /* @GetMapping("/allUsers")
     public BaseApi<?> getUsers(){
         List<UserDto> dtos = userService.listAll();
         return BaseApi.builder()
@@ -92,6 +92,6 @@ public class UserRestController {
                 .timestamp(LocalDateTime.now())
                 .data(dtos)
                 .build();
-    }
+    }*/
 
 }

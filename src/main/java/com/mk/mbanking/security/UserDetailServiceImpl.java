@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,11 +18,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        log.info("loadUserByUserName: {}",username);
-          User user = authMapper.selectByEmail(username).orElseThrow(()->
-                  new UsernameNotFoundException("user not found..!"));
-         log.info(user.getEmail());
+        log.info("loadUserByUsername: {}", username);
 
-        return null;
+        User user = authMapper.selectByEmail(username).orElseThrow(()
+                -> new UsernameNotFoundException("User is not found!"));
+
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.setUser(user);
+
+        log.info(customUserDetails.getUsername());
+        log.info(customUserDetails.getPassword());
+        log.info(customUserDetails.getUser().getRoles().toString());
+
+        return customUserDetails;
     }
 }

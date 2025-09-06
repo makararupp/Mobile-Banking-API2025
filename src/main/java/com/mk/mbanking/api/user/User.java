@@ -10,11 +10,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class User {
-    private Long id;
+    private Integer id;
     private String name;
     private String gender;
     private String oneSignalId;
-    private Boolean idDeleted;
+    private Boolean isDeleted;
     private Boolean isStudent;
     private String studentCardId;
     //Security
@@ -23,4 +23,7 @@ public class User {
     // Relationship one user can any roles
     List<Role> roles;
 
+  /*  public void setIsDeleted(Boolean isDeleted) {
+        this.idDeleted = isDeleted;
+    }*/
 }

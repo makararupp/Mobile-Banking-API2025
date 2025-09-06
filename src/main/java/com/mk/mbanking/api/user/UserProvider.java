@@ -53,12 +53,13 @@ public class UserProvider {
         }}.toString();
     }
 
-    public String updateIsDeletedSql(){
+    public String buildUpdateIsDeletedSql(){
         return new SQL(){{
             UPDATE(USERS);
             SET("is_deleted = #{status}");
             WHERE("id = #{id}");
         }}.toString();
     }
+
 
 }

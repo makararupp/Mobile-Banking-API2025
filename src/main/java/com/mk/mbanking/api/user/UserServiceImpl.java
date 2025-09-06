@@ -8,7 +8,6 @@ import com.mk.mbanking.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 
 @Service
@@ -25,11 +24,11 @@ public class UserServiceImpl implements UserService{
         return userMapstruct.userPageInfoToUserDtoPageInfo(userPageInfo);
     }
 
-    @Override
-    public List<UserDto> listAll() {
-        List<User> list = userMapper.findAll();
-        return userMapstruct.toDtoList(list);
-    }
+//    @Override
+//    public List<UserDto> listAll() {
+//        List<User> list = userMapper.findAll();
+//        return userMapstruct.toDtoList(list);
+//    }
 
     @Override
     public UserDto creat(SaveUserDto saveUserDto) {
@@ -41,15 +40,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto findById(Long id) {
+    public UserDto findById(Integer id) {
         User user = userMapper.selectById(id).orElseThrow(()->
                 new ResourceNotFoundException("User","id",id));
         return userMapstruct.userToUserDto(user);
     }
 
     @Override
-    public UserDto updateById(Long id, SaveUserDto saveUserDto) {
-        if(userMapper.exitsById(id)){
+    public UserDto updateById(Integer id, SaveUserDto saveUserDto) {
+        if(userMapper.existsById(id)){
             //TODO: update user model
             User user = userMapstruct.saveUserDtoToUser(saveUserDto);
             user.setId(id);
@@ -60,8 +59,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto deleteById(Long id) {
-        if(userMapper.exitsById(id)){
+    public UserDto deleteById(Integer id) {
+        if(userMapper.existsById(id)){
             UserDto dto =findById(id);
             userMapper.updateIsDeleted(id, true);
             return dto;

@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface UserService {
     UserDto creat(SaveUserDto saveUserDto);
-    UserDto findById(Long id);
-    UserDto updateById(Long id, SaveUserDto saveUserDto);
-    UserDto deleteById(Long id);
+    UserDto findById(Integer id);
+    UserDto updateById(Integer id, SaveUserDto saveUserDto);
+    UserDto deleteById(Integer id);
 
     PageInfo<UserDto> findWithPaging(int pageNum, int pageSize);
-    List<UserDto> listAll();
+   // List<UserDto> listAll();
 }

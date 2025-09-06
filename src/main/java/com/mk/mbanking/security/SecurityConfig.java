@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,9 +32,10 @@ public class SecurityConfig {
 
         //Configure Http mapping URL.
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET,"/api/v1/account-types/**").hasRole("USER")
-                .requestMatchers(HttpMethod.POST,"/api/v1/files/**").hasRole("EDITOR")
+                .requestMatchers(HttpMethod.POST,"/api/v1/users/**").hasRole("SYSTEM")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/users/**").hasRole("SYSTEM")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/users/**").hasRole("SYSTEM")
+                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
 
@@ -43,18 +45,23 @@ public class SecurityConfig {
         // Make session stateless
         http.sessionManagement(session
                 ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
 
      // 2. Define bean: AuthenticationManager.[User InMemory]
      // custom from DB
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
-    }
+     @Bean
+     public DaoAuthenticationProvider daoAuthenticationProvider() {
+
+         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+         authProvider.setUserDetailsService(userDetailsService);
+         authProvider.setPasswordEncoder(passwordEncoder);
+
+         return authProvider;
+     }
+
+
 
 /*    @Bean
     public UserDetailsService userDetailsService(){

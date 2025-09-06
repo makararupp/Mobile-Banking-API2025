@@ -9,6 +9,19 @@ import java.util.Optional;
 @Mapper
 @Repository
 public interface UserMapper {
+    @UpdateProvider(type = UserProvider.class, method = "buildUpdateIsDeletedSql")
+    void updateIsDeleted(@Param("id") Integer id, @Param("status") Boolean status);
+
+    @UpdateProvider(type = UserProvider.class, method = "buildUpdateSql")
+    void update(@Param("u") User user);
+
+    @Select("""
+            SELECT EXISTS(SELECT *
+            FROM users
+            WHERE id = #{id} AND is_deleted = FALSE)
+            """)
+    boolean existsById(@Param("id") Integer id);
+
     @InsertProvider(type = UserProvider.class,
             method = "buildInsertSql")
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
@@ -20,27 +33,10 @@ public interface UserMapper {
             @Result(column = "is_student", property = "isStudent"),
             @Result(column = "student_card_id", property = "studentCardId")
     })
-    Optional<User> selectById(@Param("id") Long id);
-
-    //TODO : check condition if user have in recode it's show message = true ,no hava= false
-    @Select("""
-            SELECT EXISTS(SELECT *
-            FROM users
-            WHERE id = #{id} AND is_deleted = FALSE)
-            """)
-    boolean exitsById(@Param("id")Long id);
-
-    @UpdateProvider(type = UserProvider.class, method = "buildUpdateSql")
-    void update(@Param("u") User user);
-
-    @UpdateProvider(type = UserProvider.class, method = "updateIsDeletedSql")
-    void updateIsDeleted(@Param("id")Long id, @Param("status")Boolean status);
+    Optional<User> selectById(@Param("id") Integer id);
 
     @SelectProvider(type = UserProvider.class, method = "buildSelectWithPagingSql")
     @ResultMap("userResultMap")
     List<User> select();
 
-    @SelectProvider(type = UserProvider.class, method = "buildSelectAllSql")
-    @ResultMap("userResultMap")
-    List<User> findAll();
 }
