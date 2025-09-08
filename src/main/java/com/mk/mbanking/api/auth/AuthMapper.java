@@ -11,6 +11,11 @@ import java.util.Optional;
 @Mapper
 @Repository
 public interface AuthMapper {
+
+    @InsertProvider(type = AuthProvider.class, method = "buildRegisterSql")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    void register(@Param("u") User user);
+
     @SelectProvider(type = AuthProvider.class, method = "buildSelectByEmailSql")
     @Results(id = "authResultMap", value = {
             @Result(property = "roles", column = "id",

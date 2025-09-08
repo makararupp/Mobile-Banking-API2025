@@ -33,6 +33,7 @@ public class SecurityConfig {
 
         //Configure Http mapping URL.
         http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST,"/api/v1/users/**").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.PUT,"/api/v1/users/**").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/users/**").hasRole("SYSTEM")

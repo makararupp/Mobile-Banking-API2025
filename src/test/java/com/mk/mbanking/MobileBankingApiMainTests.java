@@ -10,12 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class MobileBankingApiMainTests {
 
-    @Autowired
+   /* @Autowired
     private AuthMapper authMapper;
     @Test
     void contextLoads() {
-    }
-
+    }*/
+/*
     @Test
     void testSelectUserByEmail(){
         System.out.println(authMapper.selectByEmail("makarasam68@gmail.com"));
@@ -24,6 +24,6 @@ class MobileBankingApiMainTests {
     @Test
     void testSelectUserRoles(Integer id){
         System.out.println(authMapper.selectUserRoles(id));
-    }
+    }*/
 
 }

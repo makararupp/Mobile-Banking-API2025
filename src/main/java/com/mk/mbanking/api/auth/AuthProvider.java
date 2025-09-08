@@ -4,6 +4,15 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class AuthProvider {
 
+    public String buildRegisterSql(){
+        return new SQL(){{
+            INSERT_INTO("users");
+            VALUES("email","#{u.email}");
+            VALUES("password", "#{u.password}");
+            VALUES("is_deleted", "FALSE");
+        }}.toString();
+    }
+
     public String buildSelectUserRolesSql(){
         return new SQL() {{
             SELECT("r.id, r.name");
