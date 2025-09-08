@@ -266,3 +266,20 @@ public UserDetailsService userDetailsService(){<br>
     }
 
 }
+# fetch api client request basic auth javaScript
+
+ <!-- Client response  -->
+    <script>
+        data = "http://localhost:8080/api/v1/users";
+        fetch(data, {
+            headers: {
+                'Authorization': 'Basic ZGFyYTFAZ21haWwuY29tOjk5OTk=' // encode automatically
+            }
+        })
+            .then(rep => rep.json())
+            .then(json => {
+                console.log(json);
+            })
+            .catch(err => console.error(err));
+
+    </script>
