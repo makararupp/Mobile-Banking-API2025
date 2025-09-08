@@ -29,13 +29,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         // Disable CSRF (for APIs)
         http.csrf(token -> token.disable());
+        http.cors(Customizer.withDefaults());
 
         //Configure Http mapping URL.
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST,"/api/v1/users/**").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.PUT,"/api/v1/users/**").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/users/**").hasRole("SYSTEM")
-                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasAnyRole("SYSTEM","ADMIN")
                 .anyRequest().authenticated()
         );
 
