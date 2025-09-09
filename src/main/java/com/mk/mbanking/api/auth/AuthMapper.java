@@ -16,6 +16,9 @@ public interface AuthMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void register(@Param("u") User user);
 
+    @InsertProvider(type = AuthProvider.class, method = "buildCreateUserRolesSql")
+    void createUserRoles(@Param("userId")Integer userId, @Param("roleId") Integer roleId);
+
     @SelectProvider(type = AuthProvider.class, method = "buildSelectByEmailSql")
     @Results(id = "authResultMap", value = {
             @Result(property = "roles", column = "id",

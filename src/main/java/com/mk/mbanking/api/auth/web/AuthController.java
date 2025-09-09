@@ -21,6 +21,7 @@ public class AuthController {
     @PostMapping("/register")
     public BaseApi<?> register(@Valid @RequestBody RegisterDto registerDto){
             authService.register(registerDto);
+
             return BaseApi.builder()
                     .status(true)
                     .code(HttpStatus.OK.value())

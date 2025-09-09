@@ -311,7 +311,7 @@ public record RegisterDto(
 
 # Annotation Transaction
 
-Key Benefits of @Transactional in This Context:
+Key Benefits of @Transactional in This Context: <br>
 Atomicity: It wraps multiple database operations into a single "all-or-nothing" unit of work.
 
 Consistency: It guarantees your application data remains consistent,
