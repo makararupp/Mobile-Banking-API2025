@@ -283,3 +283,28 @@ public UserDetailsService userDetailsService(){<br>
             .catch(err => console.error(err));
 
     </script>
+
+# register 
+
+![](src/main/resources/static/img/register.png)
+
+- Noted : when you register new account we need to including roles 2 numbers because it is a list <br>
+
+public record RegisterDto(
+
+         @NotBlank(message = "Email is required")
+         @Email(message = "Email should be valid")
+         String email,
+
+        @NotBlank(message = "Password is required")
+        @Size(min = 4, message = "Password must be at least 8 characters")
+        String password,
+
+        @NotBlank(message = "Confirm password is required")
+        String confirmedPassword,
+
+        @NotNull
+        List<Integer> roleIds
+) {
+
+}
