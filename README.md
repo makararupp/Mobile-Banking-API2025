@@ -308,3 +308,17 @@ public record RegisterDto(
 ) {
 
 }
+
+# Annotation Transaction
+
+Key Benefits of @Transactional in This Context:
+Atomicity: It wraps multiple database operations into a single "all-or-nothing" unit of work.
+
+Consistency: It guarantees your application data remains consistent,
+preventing orphaned records or half-baked user accounts.
+
+Automatic Rollback: It automatically rolls back the transaction if a runtime exception is thrown.
+You don't have to write manual rollback logic.
+
+Simplified Code: You write your business logic as if everything will work,
+and Spring handles the complex transaction management behind the scenes.
