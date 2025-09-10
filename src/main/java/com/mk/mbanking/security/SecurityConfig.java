@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/api/v1/users/**").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.PUT,"/api/v1/users/**").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/users/**").hasRole("SYSTEM")
-                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasAnyRole("SYSTEM","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasAnyRole("SYSTEM","ADMIN","CUSTOMER")
                 .anyRequest().authenticated()
         );
 

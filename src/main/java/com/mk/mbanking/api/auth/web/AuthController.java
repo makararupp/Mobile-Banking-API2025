@@ -31,5 +31,17 @@ public class AuthController {
                     .build();
     }
     // 2. Login
+   @PostMapping("/login")
+    public BaseApi<?> login(@RequestBody LoginDto loginDto){
 
+        AuthDto authDto = authService.login(loginDto);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("You have been logged in successfully!")
+                .timestamp(LocalDateTime.now())
+                .data(authDto)
+                .build();
+    }
 }

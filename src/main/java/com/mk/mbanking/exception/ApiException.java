@@ -20,6 +20,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApiException {
+
     //Exception for user register new account
     @ExceptionHandler(SQLException.class)
     public ErrorApi<?> handleSQLException(SQLException e){
