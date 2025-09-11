@@ -322,3 +322,67 @@ You don't have to write manual rollback logic.
 
 Simplified Code: You write your business logic as if everything will work,
 and Spring handles the complex transaction management behind the scenes.
+
+# Login data transfer object for access basic authorization like following base64 authentication
+
+- Step 1 :
+ create AuthDto
+
+public record AuthDto(String basicHeader) {
+
+}
+
+step 2 : create AuthService
+
+public interface AuthService {
+
+  AuthDto login(LoginDto loginDto);
+
+}
+
+step 3 : implement Service
+
+    @Override
+    public AuthDto login(LoginDto loginDto) {
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+            loginDto.email(),
+            loginDto.password()
+            );
+            auth = authProvider.authenticate(auth);
+
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+
+        log.info("Auth :{}", customUserDetails.getUser().getEmail());
+        //create following algorithm and RSA keys.
+        String basicAuthString = auth.getName() + ":"+ auth.getCredentials();
+        String basicAuthHeader = Base64.getEncoder().encodeToString(basicAuthString.getBytes());
+
+        return new AuthDto(String.format("Basic %s",basicAuthHeader));
+    }
+
+
+step 4 : Call service to AuthController 
+
+    @PostMapping("/login")
+    public BaseApi<?> login(@RequestBody LoginDto loginDto){
+
+        AuthDto authDto = authService.login(loginDto);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("You have been logged in successfully!")
+                .timestamp(LocalDateTime.now())
+                .data(authDto)
+                .build();
+    }
+
+
+# I just drop the image for Login access basic authorization access resource
+
+![](src/main/resources/static/img/authLogin.png)
+
+# Copy basic auth to resource for access like below the image :
+
+![](src/main/resources/static/img/authorization.png)
